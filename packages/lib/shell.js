@@ -19,10 +19,15 @@ const format = (template = '', context = {}) => {
 const noop = Promise.resolve();
 
 export class Shell {
+  /**
+   *
+   * @param {object} container
+   * @param {Logger} container.log
+   */
   constructor(container = {}) {
     this.config = container.config || {};
     this.cache = new Map();
-    this.log = new Logger();
+    this.log = container.log || new Logger();
   }
 
   /**
@@ -35,8 +40,9 @@ export class Shell {
    * @returns
    */
   exec(command, options = {}, context = {}) {
-    if (!command || !command.length) {
-      throw new Error('Command is empty');
+    // FIXME: Error will be reported when command is emtpy
+    if (lodash.isEmpty(command)) {
+      return;
     }
     return typeof command === 'string'
       ? this.execFormattedCommand(format(command, context), options)
@@ -96,7 +102,7 @@ export class Shell {
           if (code === 0) {
             resolve(stdout);
           } else {
-            this.log.error(command)
+            this.log.error(command);
             reject(new Error(stderr || stdout));
           }
         }

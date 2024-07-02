@@ -52,6 +52,7 @@ async function main() {
     repo: repoName,
     owner: authorName,
     ghToken,
+    npmToken: process.env.NPM_TOKEN,
     pkgVersion: version,
     prBranch: process.env.PR_BRANCH,
     octokit: new Octokit({ auth: ghToken })
