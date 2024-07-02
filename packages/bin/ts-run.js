@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { program } from 'commander';
 import { resolve } from 'path';
 import { exec } from 'child_process';

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Config, Logger } from '../lib/index.js';
 import { rimraf } from 'rimraf';
 
