@@ -96,7 +96,7 @@ export class Shell {
           if (code === 0) {
             resolve(stdout);
           } else {
-            this.log.error('exec:', command)
+            this.log.error(command)
             reject(new Error(stderr || stdout));
           }
         }
