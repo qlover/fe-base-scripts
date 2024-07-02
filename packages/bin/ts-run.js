@@ -1,6 +1,5 @@
 import { program } from 'commander';
-import { join } from 'path';
-import { rootPath } from '../../config/path.config.cjs';
+import { resolve } from 'path';
 import { exec } from 'child_process';
 
 program.option('-p, --path', 'run script path');
@@ -15,7 +14,7 @@ async function main() {
     return;
   }
 
-  const scriptPath = join(rootPath, path);
+  const scriptPath = resolve(path);
   // FIXME: (node:93152) ExperimentalWarning: --experimental-loader may be removed in the future; instead use register():
   const scriptCMD = `node --loader ts-node/esm ${scriptPath}`;
 

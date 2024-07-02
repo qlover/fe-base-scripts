@@ -1,19 +1,37 @@
 import { loadEnv, getEnvDestroy } from '../utils/env.js';
-import { rootPath } from '../../config/path.config.cjs';
-import { Release } from '../lib/relesae.js';
-import { Logger } from '../lib/logger.js';
+import { Release, Logger } from '../lib/index.js';
 import { readJSON } from '../utils/files.js';
+import { resolve } from 'path';
+import lodash from 'lodash';
 
-const pkg = readJSON(new URL('../../package.json', import.meta.url));
+const pkg = readJSON(resolve('./package.json'));
+const { get, isPlainObject, isString } = lodash;
 const { author, repository, version } = pkg;
-const repo = repository.url.split('/').pop();
+
 const log = new Logger();
 
+function isValidString(value) {
+  return value && isString(value);
+}
+
 async function main() {
-  loadEnv(rootPath);
+  loadEnv();
 
   if (process.env.RELEASE === 'false') {
     log.warn('Skip Release');
+    return;
+  }
+
+  // check author
+  const authorName = isPlainObject(author) ? get(author, 'name') : author;
+  if (!isValidString(authorName)) {
+    log.error('package.json author or author.name is empty');
+    return;
+  }
+  // check repo
+  const repoName = repository.url.split('/').pop();
+  if (!isValidString(repoName)) {
+    log.error('package.json repository.url is empty');
     return;
   }
 
@@ -31,8 +49,8 @@ async function main() {
   const ghToken = getEnvDestroy('GITHUB_TOKEN') || '';
 
   const release = new Release({
-    repo,
-    owner: author,
+    repo: repoName,
+    owner: authorName,
     ghToken,
     pkgVersion: version,
     prBranch: process.env.PR_BRANCH,

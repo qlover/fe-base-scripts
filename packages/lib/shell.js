@@ -1,13 +1,8 @@
-// const util  = require( 'node:util')
 import shell from 'shelljs';
 import { execa } from 'execa';
 import { Logger } from '../lib/logger.js';
 import lodash from 'lodash';
-// const { format }  = require( './util.js')
 
-// const debug = util.debug('@qlover/fe-bae:shell');
-
-// sh.config.silent = !debug.enabled;
 const format = (template = '', context = {}) => {
   const log = new Logger();
   try {
@@ -101,6 +96,7 @@ export class Shell {
           if (code === 0) {
             resolve(stdout);
           } else {
+            this.log.error(command)
             reject(new Error(stderr || stdout));
           }
         }

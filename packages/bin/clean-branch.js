@@ -1,8 +1,9 @@
-const { execSync } = require('child_process');
-const { createInterface } = require('readline');
+import { execSync } from 'child_process';
+import { Config } from '../lib/index.js';
+import { createInterface } from 'readline';
 
-// 定义被保护的分支列表
-const protectedBranches = ['master', 'develop', 'main', 'root-src'];
+const config = new Config();
+const protectedBranches = config.options.protectedBranches;
 
 // Fetch and prune remote branches
 execSync('git fetch -p', { stdio: 'inherit' });
