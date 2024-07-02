@@ -1,15 +1,15 @@
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { install, add } from 'husky';
-import { rootPath } from '../../config/path.config.cjs';
-import { Shell } from '../lib/shell.js';
+import { Shell } from '../lib/index.js';
 import { readJSON } from '../utils/files.js';
 
-const pkg = readJSON(new URL('../../package.json', import.meta.url));
+const pkg = readJSON(resolve('./package.json'));
 const { devDependencies, dependencies } = pkg;
 
 async function main() {
   const shell = new Shell();
-  await shell.exec(`npx rimraf ${rootPath}/.husky`);
+  const rootPath = resolve('./');
+  await shell.exec(`npx rimraf ${join(rootPath, '.husky')}`);
 
   if (
     !(
