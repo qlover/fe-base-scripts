@@ -27,7 +27,7 @@ export class Logger {
   }
 
   error(...args) {
-    console.error('❌', ...args);
+    console.error(chalk.red('ERROR'), ...args);
   }
 
   info(...args) {
@@ -35,7 +35,7 @@ export class Logger {
   }
 
   warn(...args) {
-    this.log(chalk.yellow('❗️'), ...args);
+    this.log(chalk.yellow('WARNING'), ...args);
   }
 
   verbose(...args) {
@@ -80,6 +80,10 @@ export class Logger {
   }
 
   success(...args) {
-    this.log('✅', ...args);
+    this.log(chalk.green('SUCCESS'), ...args);
+  }
+
+  test(...args) {
+    this.log(chalk.cyan('TEST: '), ...args);
   }
 }

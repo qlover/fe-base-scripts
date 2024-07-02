@@ -31,6 +31,7 @@ export class Release {
    * @param {string} config.repo
    * @param {string} config.pkgVersion
    * @param {string} config.ghToken
+   * @param {string} config.npmToken
    */
   constructor(config) {
     const { prBranch, owner, repo, ghToken } = config;
@@ -42,10 +43,10 @@ export class Release {
     this.repo = repo;
     this.pkgVersion = config.pkgVersion;
     this.ghToken = ghToken;
+    this.npmToken = config.npmToken;
 
     this.log = new Logger();
     this.shell = new Shell();
-    this.npmToken = process.env.NPM_TOKEN;
     this.env = process.env.NODE_ENV;
   }
 

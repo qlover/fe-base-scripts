@@ -52,10 +52,10 @@ export class Config {
   mergeOptions() {
     return lodash.defaultsDeep(
       {
-        ci: isCI,
+        ci: isCI
       },
       this.localConfig,
-      defaultConfig,
+      defaultConfig
     );
   }
 }
