@@ -1,5 +1,5 @@
 import { loadEnv, getEnvDestroy } from '../utils/env.js';
-import { Release, Logger, Config } from '../lib/index.js';
+import { Release, Logger } from '../lib/index.js';
 import { readJSON } from '../utils/files.js';
 import { resolve } from 'path';
 import lodash from 'lodash';
