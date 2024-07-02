@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { resolve } from 'path';
 import { bootstrap } from 'commitizen/dist/cli/git-cz.js';
 import { Shell } from '../lib/index.js';

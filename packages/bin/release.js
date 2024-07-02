@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { loadEnv, getEnvDestroy } from '../utils/env.js';
 import { Release, Logger } from '../lib/index.js';
 import { readJSON } from '../utils/files.js';

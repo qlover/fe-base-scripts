@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { join, resolve } from 'path';
 import { install, add } from 'husky';
 import { Shell } from '../lib/index.js';
