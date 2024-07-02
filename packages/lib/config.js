@@ -1,4 +1,4 @@
-import { readJSON } from 'packages/utils/files';
+import { readJSON } from '../utils/index.js';
 import { cosmiconfigSync } from 'cosmiconfig';
 import lodash from 'lodash';
 import isCI from 'is-ci';
@@ -21,7 +21,7 @@ const loaders = {};
 const getLocalConfig = ({ file, dir = process.cwd() }) => {
   const localConfig = {};
   if (file === false) return localConfig;
-  const explorer = cosmiconfigSync('release-it', {
+  const explorer = cosmiconfigSync('fe-scripts', {
     searchPlaces,
     loaders
   });
@@ -41,7 +41,7 @@ export class Config {
    * @param {string} config.config
    * @param {string} config.configDir
    */
-  constructor(config) {
+  constructor(config = {}) {
     this.localConfig = getLocalConfig({
       file: config.config,
       dir: config.configDir
@@ -52,10 +52,10 @@ export class Config {
   mergeOptions() {
     return lodash.defaultsDeep(
       {
-        ci: isCI
+        ci: isCI,
       },
       this.localConfig,
-      defaultConfig
+      defaultConfig,
     );
   }
 }
