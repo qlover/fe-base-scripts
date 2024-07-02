@@ -1,5 +1,7 @@
 
 
+## [0.0.4](https://github.com/qlover/fe-base-scripts/compare/0.0.2...0.0.4) (2024-07-02)
+
 ## 0.0.2 (2024-07-02)
 
 ## Chore
