@@ -24,11 +24,11 @@
   "homepage": "https://github.com/qlover/fe-base-scripts#readme",
   "scripts": {
     "build": "npx tsup",
-    "reinit": "node ./packages/bin/init.js",
     "eslint": "eslint packages --ext .js,.ts --cache --fix",
     "lint": "eslint packages --ext .js,.ts --cache --fix",
     "test": "jest",
     "prettier": "prettier packages --write",
+    "reinit": "node ./packages/bin/reinit.js",
     "clean": "node ./packages/bin/clean.js",
     "setup:husky": "node packages/bin/setup-husky.js",
     "commit": "node ./packages/bin/commit.js",

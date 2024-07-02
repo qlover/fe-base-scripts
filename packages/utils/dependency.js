@@ -1,10 +1,34 @@
-import { Logger } from '../lib/logger.js';
-import { Shell } from '../lib/shell.js';
+// Do not have any other external dependencies
 import { createRequire } from 'module';
+import { exec } from 'child_process';
 const require = createRequire(import.meta.url);
 
-const shell = new Shell();
-const log = new Logger();
+function execPromise(command, silent = false) {
+  return new Promise((resolve, reject) => {
+    const childProcess = exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(stdout.trim());
+    });
+
+    if (silent) {
+      // Optional: Log the stdout as it becomes available
+      childProcess.stdout.on('data', (data) => {
+        console.log(data.toString().trim());
+      });
+
+      // Optional: Log the stderr as it becomes available
+      childProcess.stderr.on('data', (data) => {
+        console.error(data.toString().trim());
+      });
+    }
+  });
+}
+
+const shell = { run: execPromise };
+const log = console;
 
 async function checkDependencyInstalled(packageName, global = false) {
   const result = { local: false, global: false };
@@ -86,5 +110,6 @@ export {
   getGlobalDependencyVersion,
   getDependencyVersion,
   checkWithInstall,
-  checkYarn
+  checkYarn,
+  execPromise
 };
