@@ -7,5 +7,7 @@
     "package-lock.json",
     ".eslintcache",
     "*.log"
-  ]
+  ],
+  "author": "",
+  "repository": ""
 }

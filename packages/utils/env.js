@@ -14,7 +14,9 @@ function clearEnvVariable(variable) {
   }
 }
 
-function loadEnv(rootPath = __dirname) {
+function loadEnv(rootPath) {
+  rootPath = rootPath || resolve('./');
+  console.log(rootPath);
   for (const file of preloadList) {
     const envLocalPath = resolve(rootPath, file);
     if (existsSync(envLocalPath)) {
