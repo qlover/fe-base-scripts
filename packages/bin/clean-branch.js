@@ -1,5 +1,5 @@
-const { execSync } = require('child_process');
-const { createInterface } = require('readline');
+import { execSync } from 'child_process';
+import { createInterface } from 'readline';
 
 // 定义被保护的分支列表
 const protectedBranches = ['master', 'develop', 'main', 'root-src'];

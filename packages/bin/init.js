@@ -1,6 +1,5 @@
 import { checkWithInstall, checkYarn } from '../utils/dependency.js';
-import { Logger } from '../lib/logger.js';
-import { Shell } from '../lib/shell.js';
+import { Logger, Shell } from '../lib/index.js';
 
 const log = new Logger();
 const shell = new Shell();
