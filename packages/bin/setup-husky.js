@@ -14,11 +14,10 @@ async function main() {
   await shell.exec(`npx rimraf ${join(rootPath, '.husky')}`);
 
   if (
-    !(
-      devDependencies['cz-conventional-changelog'] ||
-      dependencies['cz-conventional-changelog']
-    )
+    devDependencies['cz-conventional-changelog'] ||
+    dependencies['cz-conventional-changelog']
   ) {
+    console.log('jjj');
     await shell.exec(
       'npx commitizen init cz-conventional-changelog --save-dev --save-exact'
     );
