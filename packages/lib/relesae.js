@@ -1,5 +1,10 @@
 import { Shell } from './shell.js';
 import { Logger } from './logger.js';
+import { cosmiconfigSync } from 'cosmiconfig';
+import { dirname, join, resolve } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const ContentTpl = {
   PR_TITLE_TPL: '[From bot] Release {mainBranch} v{tagName} from {env}',
@@ -21,6 +26,19 @@ const ContentTpl = {
     return ContentTpl.PR_BODY_TPL.replace('{tagName}', tagName);
   }
 };
+
+// https://github.com/release-it/release-it/blob/main/lib/config.js#L11
+const searchPlaces = [
+  'package.json',
+  '.release-it.json',
+  '.release-it.js',
+  '.release-it.ts',
+  '.release-it.cjs',
+  '.release-it.yaml',
+  '.release-it.yml'
+  // FIXME:
+  // '.release-it.toml'
+];
 
 export class Release {
   /**
@@ -56,6 +74,40 @@ export class Release {
     return (match && match[1]) || '';
   }
 
+  /**
+   * @see https://github.com/release-it/release-it/blob/main/lib/config.js#L29
+   * @returns
+   * TODO:
+   *  If the release it of the project is configured, merge it with the local default one
+   *  Directly return a config configuration file path
+   */
+  getReleaseItConfig() {
+    const explorer = cosmiconfigSync('release-it', { searchPlaces });
+    const result = explorer.search(resolve());
+
+    // find!
+    if (result) {
+      return;
+    }
+
+    // this json copy with release-it default json
+    return join(__dirname, '../../.release-it.json');
+  }
+
+  componseReleaseItCommand() {
+    const releaseItConfig = this.getReleaseItConfig();
+    // search
+    const command = ['npx release-it'];
+
+    command.push('--ci');
+
+    if (releaseItConfig) {
+      command.push(`--config ${releaseItConfig}`);
+    }
+
+    return command.join(' ');
+  }
+
   async publish() {
     this.log.log('Publishing to NPM and GitHub...');
 
@@ -63,7 +115,7 @@ export class Release {
       `echo "//registry.npmjs.org/:_authToken=${this.npmToken}" > .npmrc`
     );
 
-    await this.shell.exec('npx release-it --ci', {
+    await this.shell.exec(this.componseReleaseItCommand(), {
       env: {
         ...process.env,
         NPM_TOKEN: this.npmToken,

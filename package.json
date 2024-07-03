@@ -16,6 +16,7 @@
     "packages",
     "package.json",
     "commitlint.config.js",
+    ".release-it.json",
     "README.md"
   ],
   "repository": {
