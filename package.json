@@ -25,11 +25,11 @@
   "bin": {
     "fe-reinit": "./packages/bin/reinit.js",
     "fe-clean": "./packages/bin/clean.js",
-    "fe-setup:husky": "./packages/bin/setup-husky.js",
+    "fe-setup-husky": "./packages/bin/setup-husky.js",
     "fe-commit": "./packages/bin/commit.js",
     "fe-release": "./packages/bin/release.js",
     "fe-ts-run": "./packages/bin/ts-run.js",
-    "fe-clean:branch": "./packages/bin/clean-branch.js"
+    "fe-clean-branch": "./packages/bin/clean-branch.js"
   },
   "scripts": {
     "build": "echo \"no build script\"",
