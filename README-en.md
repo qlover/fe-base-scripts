@@ -3,7 +3,7 @@
 Integrated basic development tool scripts for the `fe-base` project
 Internal integration `release-it`, `commitlint`, `husky`
 
-- `fe-clean` Cleans all tool generated files or directories, such as `node.modules, yarn.lock, dist`
+- `fe-clean` Cleans all tool generated files or directories, such as `node_modules, yarn.lock, dist`
 
 - `fe-reinit` init project, `yarn install...`
 - `fe-commit` code submission
