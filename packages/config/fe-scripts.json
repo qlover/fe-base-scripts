@@ -9,5 +9,9 @@
     "*.log"
   ],
   "author": "",
-  "repository": ""
+  "repository": "",
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"]
+  },
+  "releaseIt": {}
 }

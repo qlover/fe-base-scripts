@@ -30,7 +30,7 @@ function main() {
   // cz
   // https://www.npmjs.com/package/commitizen#Commitizen for multi-repo projects
   bootstrap({
-    cliPath: join(__dirname, '../../node_modules/commitizen'),
+    cliPath: resolve('node_modules/commitizen'),
     config: { path }
   });
 }
