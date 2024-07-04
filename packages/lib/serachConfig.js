@@ -20,7 +20,7 @@ export class SerachConfig {
 
   get({ file, dir = process.cwd() }) {
     const localConfig = {};
-    if (!file) return localConfig;
+    if (file === false) return localConfig;
     const explorer = cosmiconfigSync(this.name, {
       searchPlaces: this._config.searchPlaces,
       loaders: this._config.loaders
