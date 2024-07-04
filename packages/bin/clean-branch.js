@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
-import { Config } from '../lib/index.js';
+import { feScriptsSearch } from '../lib/index.js';
 import { createInterface } from 'readline';
 
-const config = new Config();
-const protectedBranches = config.options.protectedBranches;
+const protectedBranches = feScriptsSearch.config.protectedBranches;
 
 // Fetch and prune remote branches
 execSync('git fetch -p', { stdio: 'inherit' });

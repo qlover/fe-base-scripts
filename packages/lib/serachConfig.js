@@ -8,11 +8,14 @@ export class SerachConfig {
   constructor(config) {
     this.name = config.name;
     this._config = config.config;
-    this.cache = null;
+  }
+
+  get localConfig() {
+    return this._config._default;
   }
 
   get config() {
-    return this.mergeConfig();
+    return lodash.defaultsDeep({}, this.search(), this._config._default);
   }
 
   get({ file, dir = process.cwd() }) {
@@ -32,16 +35,11 @@ export class SerachConfig {
       : localConfig;
   }
 
+  /**
+   * TODO: need cache
+   * @returns
+   */
   search() {
-    if (this.cache) {
-      return this.cache;
-    }
-    this.cache = this.get({});
-
-    return this.cache;
-  }
-
-  mergeConfig() {
-    return lodash.defaultsDeep({}, this.cache || {}, this._config._default);
+    return this.get({});
   }
 }
