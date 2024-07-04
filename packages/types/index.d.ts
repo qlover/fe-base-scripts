@@ -7,4 +7,18 @@ declare module '@qlover/fe-scripts' {
     name: string;
     config: SearchConfigType;
   };
+
+  export type FeScriptsConfig = {
+    protectedBranches?: string;
+    cleanFiles?: string[];
+    author?: string;
+    repository?:
+      | string
+      | {
+          name?: string;
+          email?: string;
+        };
+    commitlint?: import('@commitlint/types').UserConfig;
+    releaseIt?: import('release-it').Config;
+  };
 }
