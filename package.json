@@ -8,10 +8,11 @@
     ".": {
       "require": "./packages/lib/index.js",
       "import": "./packages/lib/index.js",
-      "types": "./types/index.d.ts"
+      "types": "./packages/types/index.d.ts"
     },
     "./package.json": "./package.json"
   },
+  "types": "./packages/types/index.d.ts",
   "files": [
     "packages",
     "package.json",
