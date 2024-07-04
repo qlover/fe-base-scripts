@@ -3,7 +3,6 @@
 import { dirname, join, resolve } from 'path';
 import { install, add } from 'husky';
 import { Shell } from '../lib/index.js';
-import { readJSON } from '../utils/files.js';
 import { fileURLToPath } from 'url';
 
 async function main() {
@@ -12,9 +11,6 @@ async function main() {
   const absoultePath = join(dirname(fileURLToPath(import.meta.url)), '../../');
 
   await shell.exec(`npx rimraf ${join(relativePath, '.husky')}`);
-
-  const pkg = readJSON(join(absoultePath, 'package.json'));
-  const { name } = pkg;
 
   // if (
   //   devDependencies['cz-conventional-changelog'] ||
@@ -32,7 +28,6 @@ async function main() {
   // )
 
   const commitlintConfig = join(absoultePath, 'commitlint.config.js');
-  // const commitlintConfig = join(`node_modules/${name}`, 'commitlint.config.js');
 
   const command = `npx --no -- commitlint --config ${commitlintConfig} --edit "$1"`;
   add(join(relativePath, '.husky/commit-msg'), command);
