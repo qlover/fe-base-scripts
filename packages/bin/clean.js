@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-import { Config, Logger } from '../lib/index.js';
+import { Logger, feScriptsSearch } from '../lib/index.js';
 import { rimraf } from 'rimraf';
 
 async function main() {
-  const config = new Config();
   const log = new Logger();
-  const files = config.options.cleanFiles.join(' ');
+  const config = feScriptsSearch.config;
+  const files = config.cleanFiles.join(' ');
   // https://stackoverflow.com/questions/75281066/error-illegal-characters-in-path-in-npm-rimraf
-  await rimraf(config.options.cleanFiles, { glob: true });
+  await rimraf(config.cleanFiles, { glob: true });
   log.success('Clean successfully', files);
 }
 
