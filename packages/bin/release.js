@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 
 import { loadEnv, getEnvDestroy } from '../utils/env.js';
-import { Release, Logger } from '../lib/index.js';
+import { Release, Logger, feScriptsSearch } from '../lib/index.js';
 import { readJSON } from '../utils/files.js';
 import { resolve } from 'path';
 import lodash from 'lodash';
-
 const pkg = readJSON(resolve('./package.json'));
+
 const { get, isPlainObject, isString } = lodash;
-const { author, repository, version } = pkg;
 
 const log = new Logger();
 
@@ -16,24 +15,35 @@ function isValidString(value) {
   return value && isString(value);
 }
 
+function getUserInfo() {
+  const { author, repository } = pkg;
+  const feScriptsConfig = feScriptsSearch.config;
+  const localAuthor = feScriptsConfig.author || author;
+
+  // check author
+  const authorName = isPlainObject(localAuthor)
+    ? get(localAuthor, 'name')
+    : localAuthor;
+
+  if (!isValidString(authorName)) {
+    throw new Error('please set .fe-scripts valid author');
+  }
+
+  const repoName =
+    feScriptsConfig.repository || repository.url.split('/').pop();
+  // check repo
+  if (!isValidString(repoName)) {
+    throw new Error('please set .fe-scripts repository author');
+  }
+
+  return { repoName, authorName };
+}
+
 async function main() {
   loadEnv();
 
   if (process.env.RELEASE === 'false') {
     log.warn('Skip Release');
-    return;
-  }
-
-  // check author
-  const authorName = isPlainObject(author) ? get(author, 'name') : author;
-  if (!isValidString(authorName)) {
-    log.error('package.json author or author.name is empty');
-    return;
-  }
-  // check repo
-  const repoName = repository.url.split('/').pop();
-  if (!isValidString(repoName)) {
-    log.error('package.json repository.url is empty');
     return;
   }
 
@@ -46,16 +56,18 @@ async function main() {
     process.exit(1);
   }
 
+  const userInfo = getUserInfo();
+
   const { Octokit } = await import('@octokit/rest');
 
   const ghToken = getEnvDestroy('GITHUB_TOKEN') || '';
 
   const release = new Release({
-    repo: repoName,
-    owner: authorName,
+    repo: userInfo.repoName,
+    owner: userInfo.authorName,
     ghToken,
     npmToken: process.env.NPM_TOKEN,
-    pkgVersion: version,
+    pkgVersion: pkg.version,
     prBranch: process.env.PR_BRANCH,
     octokit: new Octokit({ auth: ghToken })
   });
