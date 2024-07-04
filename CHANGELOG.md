@@ -1,5 +1,7 @@
 
 
+## [0.0.10](https://github.com/qlover/fe-base-scripts/compare/0.0.9...0.0.10) (2024-07-04)
+
 ## [0.0.9](https://github.com/qlover/fe-base-scripts/compare/0.0.8...0.0.9) (2024-07-04)
 
 ## [0.0.8](https://github.com/qlover/fe-base-scripts/compare/0.0.7...0.0.8) (2024-07-04)
