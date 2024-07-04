@@ -1,6 +1,6 @@
 {
   "name": "@qlover/fe-scripts",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "fe scripts",
   "type": "module",
   "private": false,
