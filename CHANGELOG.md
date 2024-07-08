@@ -1,5 +1,13 @@
 
 
+## 0.0.8 (2024-07-08)
+
+
+### Bug Fixes
+
+* release ([#40](https://github.com/qlover/fe-base-scripts/issues/40)) ([9ca217e](https://github.com/qlover/fe-base-scripts/commit/9ca217eac6474b21380256f1c06471c20bee64b8))
+* scripts command ([0097bef](https://github.com/qlover/fe-base-scripts/commit/0097bef35b496b93a07c8761b9bf2ffd7aa0a898))
+
 ## 0.0.7 (2024-07-08)
 
 
