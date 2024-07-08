@@ -7,36 +7,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Print GitHub Event Information
+        run: echo "${{ toJson(github.event) }}" > event.json
       - name: Get PR title
         id: pr-title
         run: |
-          PR_NUMBER=$(echo ${{ github.event.head_commit.message }} | grep -oP '(?<=Merge pull request #)\d+')
+          echo "Extracting PR number from commit message: ${{ github.event.head_commit.message }}"
+          PR_NUMBER=$(echo "${{ github.event.head_commit.message }}" | grep -oP '(?<=Merge pull request #)\d+')
+          echo "Extracted PR number: $PR_NUMBER"
           if [ -n "$PR_NUMBER" ]; then
             PR_TITLE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
               "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}" \
               | jq --raw-output .title)
+            echo "Fetched PR title: $PR_TITLE"
             echo "::set-output name=title::$PR_TITLE"
+          else
+            echo "PR number not found in commit message."
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Run with PRTitle
-        run: |
-          if [[ "${{ steps.pr-title.outputs.title }}" == *"[Bot Release]"* ]]; then
-            echo "Has Bot PR merge to test"
-            # npm run release
-          else
-            echo "Has PR merge to test"
-            # npm run release:create
-          fi
-      - name: Print GitHub Event Information
-        run: echo "${{ toJson(github.event) }}" > event.json
-      - name: Display GitHub Event Information
-        run: cat event.json
-      # - name: Pretty Print GitHub Event Information
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install jq -y
-      #     cat event.json | jq
-
+      - name: Release with PRTitle
+        if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == true
+        run: echo "Bot Release"
+      - name: Release with PRTitle false
+        if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == true
+        run: echo "not Bot Release"
+      
