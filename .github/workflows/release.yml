@@ -2,7 +2,7 @@ name: FE Release
 on:
   push:
     branches:
-      - test
+      - master
 jobs:
   create-release-PR:
     runs-on: ubuntu-latest
