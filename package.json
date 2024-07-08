@@ -1,6 +1,6 @@
 {
   "name": "@qlover/fe-scripts-test",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "fe scripts",
   "type": "module",
   "private": false,
@@ -45,6 +45,7 @@
     "setup:husky": "node packages/bin/setup-husky.js",
     "commit": "node ./packages/bin/commit.js",
     "release": "node ./packages/bin/release.js",
+    "release:create": "node ./packages/bin/release-pr.js",
     "ts-run": "node ./packages/bin/ts-run.js",
     "clean:branch": "node ./packages/bin/clean-branch.js"
   },

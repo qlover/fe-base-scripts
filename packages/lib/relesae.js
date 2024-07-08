@@ -1,71 +1,22 @@
 import { Shell } from './shell.js';
 import { Logger } from './logger.js';
-import { cosmiconfigSync } from 'cosmiconfig';
-import { dirname, join, resolve } from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const ContentTpl = {
-  PR_TITLE_TPL: '[From bot] Release {mainBranch} v{tagName} from {env}',
-  PR_BODY_TPL: 'This PR includes version bump to v{tagName}',
-  RELEASE_BRANCH: '{env}-release-v{tagName}',
-
-  getReleaseBranch(tagName, env) {
-    return ContentTpl.RELEASE_BRANCH.replace('{env}', env).replace(
-      '{tagName}',
-      tagName
-    );
-  },
-  getPRtitle(mainBranch, tagName, env) {
-    return ContentTpl.PR_TITLE_TPL.replace('{mainBranch}', mainBranch)
-      .replace('{tagName}', tagName)
-      .replace('{env}', env);
-  },
-  getPRBody(tagName) {
-    return ContentTpl.PR_BODY_TPL.replace('{tagName}', tagName);
-  }
-};
-
-// https://github.com/release-it/release-it/blob/main/lib/config.js#L11
-const searchPlaces = [
-  'package.json',
-  '.release-it.json',
-  '.release-it.js',
-  '.release-it.ts',
-  '.release-it.cjs',
-  '.release-it.yaml',
-  '.release-it.yml'
-  // FIXME:
-  // '.release-it.toml'
-];
 
 export class Release {
-  /**
-   * @param {Object} config
-   * @param {import('@octokit/rest').Octokit} config.octokit
-   * @param {string} config.prBranch
-   * @param {string} config.owner
-   * @param {string} config.repo
-   * @param {string} config.pkgVersion
-   * @param {string} config.ghToken
-   * @param {string} config.npmToken
-   */
   constructor(config) {
-    const { prBranch, owner, repo, ghToken } = config;
-
-    this.octokit = config.octokit;
-
-    this.mainBranch = prBranch;
-    this.owner = owner;
-    this.repo = repo;
-    this.pkgVersion = config.pkgVersion;
-    this.ghToken = ghToken;
-    this.npmToken = config.npmToken;
-
+    /**
+     * @type {import('./releaseConfig.js').ReleaseConfig} config
+     */
+    this.config = config;
     this.log = new Logger();
     this.shell = new Shell();
-    this.env = process.env.NODE_ENV;
+  }
+
+  get releaseItEnv() {
+    return {
+      ...process.env,
+      NPM_TOKEN: this.config.npmToken,
+      GITHUB_TOKEN: this.config.ghToken
+    };
   }
 
   getPRNumber(output) {
@@ -74,32 +25,24 @@ export class Release {
     return (match && match[1]) || '';
   }
 
-  /**
-   * @see https://github.com/release-it/release-it/blob/main/lib/config.js#L29
-   * @returns
-   * TODO:
-   *  If the release it of the project is configured, merge it with the local default one
-   *  Directly return a config configuration file path
-   */
-  getReleaseItConfig() {
-    const explorer = cosmiconfigSync('release-it', { searchPlaces });
-    const result = explorer.search(resolve());
-
-    // find!
-    if (result) {
-      return;
-    }
-
-    // this json copy with release-it default json
-    return join(__dirname, '../../.release-it.json');
-  }
-
   componseReleaseItCommand() {
-    const releaseItConfig = this.getReleaseItConfig();
+    const releaseItConfig = this.config.getReleaseItConfig();
     // search
     const command = ['npx release-it'];
 
     command.push('--ci');
+
+    // 1. no publish npm
+    // 2. no publish github/release/tag
+    if (this.config.isCreateRelease) {
+      command.push(
+        '--no-npm.publish --no-git.push --no-github.publish --no-github.release'
+      );
+    }
+    // use current pkg, no publish npm and publish github
+    else {
+      command.push('--no-increment');
+    }
 
     if (releaseItConfig) {
       command.push(`--config ${releaseItConfig}`);
@@ -108,29 +51,24 @@ export class Release {
     return command.join(' ');
   }
 
-  async publish() {
-    this.log.log('Publishing to NPM and GitHub...');
-
+  async releaseIt() {
     await this.shell.exec(
-      `echo "//registry.npmjs.org/:_authToken=${this.npmToken}" > .npmrc`
+      `echo "//registry.npmjs.org/:_authToken=${this.config.npmToken}" > .npmrc`
     );
 
     await this.shell.exec(this.componseReleaseItCommand(), {
-      env: {
-        ...process.env,
-        NPM_TOKEN: this.npmToken,
-        GITHUB_TOKEN: this.ghToken
-      }
+      env: this.releaseItEnv
     });
-
-    this.log.success('Publishing to NPM successfully');
   }
 
   async checkTag() {
-    const lastTag = await this.shell.exec(`git describe --tags --abbrev=0`, {
-      silent: true
-    });
-    const tagName = lastTag || this.pkgVersion;
+    const lastTag = await this.shell.exec(
+      `git tag --sort=-creatordate | head -n 1`,
+      {
+        silent: true
+      }
+    );
+    const tagName = lastTag || this.config.pkgVersion;
     this.log.log('Created Tag is:', tagName);
 
     return { tagName };
@@ -140,15 +78,16 @@ export class Release {
     const { tagName } = await this.checkTag();
 
     // create a release branch, use new tagName as release branch name
-    const releaseBranch = ContentTpl.getReleaseBranch(tagName, this.env);
+    const releaseBranch = this.config.getReleaseBranch(tagName);
 
     this.log.log('Create Release PR branch', releaseBranch);
 
-    await this.shell.exec(`git merge origin/${this.mainBranch}`);
+    await this.shell.exec(`git merge origin/${this.config.branch}`);
     await this.shell.exec(`git checkout -b ${releaseBranch}`);
 
     try {
       await this.shell.exec(`git push origin ${releaseBranch}`);
+      this.log.success(`PR Branch ${releaseBranch} push Successfully!`);
     } catch (error) {
       this.log.error(error);
     }
@@ -160,12 +99,12 @@ export class Release {
     this.log.log('Create Release PR', tagName, releaseBranch);
 
     await this.shell.exec(
-      `echo "${this.ghToken}" | gh auth login --with-token`
+      `echo "${this.config.ghToken}" | gh auth login --with-token`
     );
 
-    const title = ContentTpl.getPRtitle(this.mainBranch, tagName, this.env);
-    const body = ContentTpl.getPRBody(tagName);
-    const command = `gh pr create --title "${title}" --body "${body}" --base ${this.mainBranch} --head ${releaseBranch}`;
+    const title = this.config.getReleasePRTitle(tagName);
+    const body = this.config.getReleasePRBody(tagName);
+    const command = `gh pr create --title "${title}" --body "${body}" --base ${this.config.branch} --head ${releaseBranch}`;
 
     let output = '';
     try {
@@ -197,16 +136,18 @@ export class Release {
       return;
     }
 
-    if (!this.repo || !this.owner) {
+    const userInfo = this.config.userInfo;
+    if (!userInfo.repoName || !userInfo.authorName) {
       this.log.error('Not round repo or owner!!!');
       process.exit(1);
     }
 
     this.log.log(`Merging PR #${prNumber} ...`);
 
-    await this.octokit.pulls.merge({
-      owner: this.owner,
-      repo: this.repo,
+    const octokit = await this.config.getOctokit();
+    await octokit.pulls.merge({
+      owner: userInfo.authorName,
+      repo: userInfo.repoName,
       pull_number: prNumber,
       merge_method: 'merge' // 合并方式，可以是 merge, squash 或 rebase
     });

@@ -14,7 +14,7 @@
     "commitArgs": [],
     "tag": true,
     "tagExclude": null,
-    "tagName": null,
+    "tagName": "test-v${version}",
     "tagMatch": null,
     "getLatestTagFromAllRefs": false,
     "tagAnnotation": "chore(tag): release v${version}",
