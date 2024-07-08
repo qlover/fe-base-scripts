@@ -28,7 +28,7 @@ const searchPlaces = [
 ];
 
 export class ReleaseConfig {
-  constructor({ isCreateRelease }) {
+  constructor({ isCreateRelease } = {}) {
     this.isCreateRelease = !!isCreateRelease;
     this.ghToken = '';
     this.npmToken = '';
