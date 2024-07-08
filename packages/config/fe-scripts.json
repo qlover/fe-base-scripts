@@ -8,7 +8,7 @@
     ".eslintcache",
     "*.log"
   ],
-  "author": "github-actions[bot]",
+  "author": "",
   "repository": "",
   "commitlint": {
     "extends": ["@commitlint/config-conventional"]
@@ -17,7 +17,7 @@
   "release": {
     "autoMergeReleasePR": true,
     "branchName": "${env}-${branch}-${tagName}",
-    "PRTitle": "[Bot Release] Branch ${branch}, Tag: ${tagName}, Env: ${env}",
+    "PRTitle": "[Bot Release] Branch:${branch}, Tag:${tagName}, Env:${env}",
     "PRBody": "This PR includes version bump to ${tagName}"
   }
 }
