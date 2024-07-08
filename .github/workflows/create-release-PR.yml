@@ -13,17 +13,12 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.push.head.ref }}
           repository: ${{ github.event.push.head.repo.full_name }}
-      - name: Install dependencies
-        run: yarn install
-      - name: Config Git
+      - name: Get PR title and author
+        id: pr_info
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      # !!!open Workflow permissions setting, Actions -> general -> Workflow permissions -> Read and write permissions
-      # When releasing, a commit will be created and then submitted to the branch, creating a PR to merge with the protected branch
-      - name: Create Publishing to NPM and GitHub PR
-        run: npm run release:create
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN}}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN}}
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          echo "::set-output name=title::${{ github.event.push.title }}"
+          echo "::set-output name=user::${{ github.event.push.user.login }}"
+      - name: Run special release steps
+        if: ${{ steps.pr_info.outputs.user == 'github-actions[bot]' || startsWith(steps.pr_info.outputs.title, '[Bot Release]') }}
+        run: |
+          echo "Running special release steps"
