@@ -6,7 +6,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, '[Bot Release]') == true
+    if: github.event.push.user.login == 'github-actions[bot]' || startsWith(github.event.push.title, '[Bot Release]')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
