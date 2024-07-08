@@ -1,5 +1,17 @@
 
 
+## 0.0.16 (2024-07-08)
+
+
+### Bug Fixes
+
+* scripts command ([0097bef](https://github.com/qlover/fe-base-scripts/commit/0097bef35b496b93a07c8761b9bf2ffd7aa0a898))
+
+
+### Features
+
+* default auto merge release PR ([#44](https://github.com/qlover/fe-base-scripts/issues/44)) ([aa71a7e](https://github.com/qlover/fe-base-scripts/commit/aa71a7e7503e0dbf2c9d9c4959db48012dc5d02a))
+
 ## [0.0.15](https://github.com/qlover/fe-base-scripts/compare/0.0.14...0.0.15) (2024-07-08)
 
 ## [0.0.14](https://github.com/qlover/fe-base-scripts/compare/0.0.13...0.0.14) (2024-07-08)
