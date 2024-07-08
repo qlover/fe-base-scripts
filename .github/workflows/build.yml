@@ -1,11 +1,11 @@
-name: FE Build master
+name: FE Build test
 on:
   pull_request:
     branches:
-      - master
+      - test
   push:
     branches:
-      - master
+      - test
 jobs:
   build:
     runs-on: ubuntu-latest

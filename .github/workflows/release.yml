@@ -2,9 +2,9 @@ name: FE Release
 on:
   push:
     branches:
-      - master
+      - test
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     if: contains(github.event.head_commit.message, '[Bot Release]') == true
     steps:
