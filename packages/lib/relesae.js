@@ -125,6 +125,7 @@ export class Release {
       // process.exit(1);
       return;
     }
+    this.log.log(output);
     this.log.success('Created PR Successfully');
 
     return prNumber;
