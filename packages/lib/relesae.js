@@ -53,9 +53,16 @@ export class Release {
 
     command.push('--ci');
 
+    // 1. no publish npm
+    // 2. no publish github/release/tag
+    if (this.config.isCreateRelease) {
+      command.push(
+        '--no-npm.publish --no-git.push --no-github.publish --no-github.release'
+      );
+    }
     // use current pkg, no publish npm and publish github
-    if (this.config.isReleasePR) {
-      command.push('--no-increment --no-npm.publish --no-github.publish');
+    else {
+      command.push('--no-increment');
     }
 
     if (releaseItConfig) {
@@ -105,6 +112,7 @@ export class Release {
 
     try {
       await this.shell.exec(`git push origin ${releaseBranch}`);
+      this.log.success(`PR Branch ${releaseBranch} push Successfully!`);
     } catch (error) {
       this.log.error(error);
     }

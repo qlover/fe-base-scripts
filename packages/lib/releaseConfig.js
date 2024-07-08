@@ -28,8 +28,8 @@ const searchPlaces = [
 ];
 
 export class ReleaseConfig {
-  constructor({ isReleasePR }) {
-    this.isReleasePR = !!isReleasePR;
+  constructor({ isCreateRelease }) {
+    this.isCreateRelease = !!isCreateRelease;
     this.ghToken = '';
     this.npmToken = '';
     this.branch = '';
