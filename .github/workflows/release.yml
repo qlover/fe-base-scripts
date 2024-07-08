@@ -4,18 +4,52 @@ on:
     branches:
       - test
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
+      # - name: Print GitHub Event Information
+      #   run: echo "${{ toJson(github.event) }}" > event.json
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Print GitHub Event Information
-        run: echo "${{ toJson(github.event) }}" > event.json
-      - name: Display GitHub Event Information
-        run: cat event.json
-      # - name: Pretty Print GitHub Event Information
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install jq -y
-      #     cat event.json | jq
+      - name: Install dependencies
+        run: yarn install
 
+      - name: Get PR title
+        id: pr-title
+        run: |
+          # Get the commit SHA of the push
+          COMMIT_SHA=${{ github.event.after }}
+          
+          # Use the commit SHA to find the PR number
+          PR_NUMBER=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/${COMMIT_SHA}/pulls" \
+            | jq --raw-output '.[0].number')
+          
+          # If PR number found, fetch the PR title
+          if [ -n "$PR_NUMBER" ]; then
+            PR_TITLE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}" \
+              | jq --raw-output .title)
+            echo "::set-output name=title::$PR_TITLE"
+          else
+            echo "No PR number found for commit ${COMMIT_SHA}."
+          fi
+          echo "${{steps.pr-title.outputs.title}}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+
+      # use [bot] to distinguish between release and release pr 
+      - name: Publishing to NPM and GitHub
+        if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == true
+        run: npm run release
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN}}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN}}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }} 
+      - name: Create Publish to NPM and Github PR
+        if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == false
+        run: npm run release:create
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN}}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN}}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}

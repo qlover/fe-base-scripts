@@ -9,13 +9,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Print GitHub Event Information
-        run: echo "${{ toJson(github.event) }}" > event.json
-      - name: Display GitHub Event Information
-        run: cat event.json
-      # - name: Pretty Print GitHub Event Information
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install jq -y
-      #     cat event.json | jq
-
+      - name: Install dependencies
+        run: yarn install
+      - name: Lint
+        run: yarn lint
+      - name: Test
+        run: yarn test
