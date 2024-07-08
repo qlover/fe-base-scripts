@@ -15,5 +15,5 @@ jobs:
           repository: ${{ github.event.push.head.repo.full_name }}
       - name: Get PR title and author
         id: pr_info
-        run:  echo "${{ toJson(github.event) }}
+        run:  echo "${{ toJson(github.event) }}"
   
