@@ -4,10 +4,9 @@ import { Release } from '../lib/index.js';
 import { ReleaseConfig } from '../lib/releaseConfig.js';
 
 async function main() {
-  this.log.log('Create Publish to NPM and Github PR ...');
-
   const releaseConfig = new ReleaseConfig({ isCreateRelease: true }).setup();
 
+  releaseConfig.log.log('Create Publish to NPM and Github PR ...');
   const release = new Release(releaseConfig);
 
   await release.releaseIt();
@@ -16,11 +15,15 @@ async function main() {
 
   const prNumber = await release.createReleasePR(tagName, releaseBranch);
 
-  await release.autoMergePR(prNumber);
+  if (releaseConfig.feScriptsConfig.release.autoMergeReleasePR) {
+    releaseConfig.log.log('auto mergae release PR...');
 
-  release.checkedPR(prNumber, releaseBranch);
+    await release.autoMergePR(prNumber);
 
-  releaseConfig.log.success('Create Release successfully');
+    await release.checkedPR(prNumber, releaseBranch);
+  }
+
+  releaseConfig.log.success(`Create Release PR(#${prNumber}) successfully`);
 }
 
 main();
