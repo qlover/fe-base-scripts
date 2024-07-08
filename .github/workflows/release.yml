@@ -36,10 +36,10 @@ jobs:
       - name: Release with PRTitle
         if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == true
         run: |
+          echo "${{steps.pr-title.outputs.title}}"
           echo "Bot Release"
-          echo "${{steps.pr-title.outputs.title}}"
       - name: Release with PRTitle false
-        if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == true
+        if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == false
         run: |
-          echo "not Bot Release"
           echo "${{steps.pr-title.outputs.title}}"
+          echo "not Bot Release"
