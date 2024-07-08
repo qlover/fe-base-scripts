@@ -1,5 +1,12 @@
 
 
+## [0.0.14](https://github.com/qlover/fe-base-scripts/compare/0.0.13...0.0.14) (2024-07-08)
+
+
+### Features
+
+* default auto merge release PR ([#44](https://github.com/qlover/fe-base-scripts/issues/44)) ([aa71a7e](https://github.com/qlover/fe-base-scripts/commit/aa71a7e7503e0dbf2c9d9c4959db48012dc5d02a))
+
 ## [0.0.13](https://github.com/qlover/fe-base-scripts/compare/test-v0.0.2...0.0.13) (2024-07-08)
 
 ## 0.0.8 (2024-07-08)
