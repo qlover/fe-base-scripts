@@ -12,17 +12,22 @@ jobs:
       - name: Get PR title
         id: pr-title
         run: |
-          echo "Extracting PR number from commit message: ${{ github.event.head_commit.message }}"
-          PR_NUMBER=$(echo "${{ github.event.head_commit.message }}" | grep -oP '(?<=Merge pull request #)\d+')
-          echo "Extracted PR number: $PR_NUMBER"
+          # Get the commit SHA of the push
+          COMMIT_SHA=${{ github.event.after }}
+          
+          # Use the commit SHA to find the PR number
+          PR_NUMBER=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/${COMMIT_SHA}/pulls" \
+            | jq --raw-output '.[0].number')
+          
+          # If PR number found, fetch the PR title
           if [ -n "$PR_NUMBER" ]; then
             PR_TITLE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
               "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}" \
               | jq --raw-output .title)
-            echo "Fetched PR title: $PR_TITLE"
             echo "::set-output name=title::$PR_TITLE"
           else
-            echo "PR number not found in commit message."
+            echo "No PR number found for commit ${COMMIT_SHA}."
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
@@ -30,8 +35,11 @@ jobs:
         uses: actions/checkout@v3
       - name: Release with PRTitle
         if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == true
-        run: echo "Bot Release"
+        run: |
+          echo "Bot Release"
+          echo "${{steps.pr-title.outputs.title}}"
       - name: Release with PRTitle false
         if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == true
-        run: echo "not Bot Release"
-
+        run: |
+          echo "not Bot Release"
+          echo "${{steps.pr-title.outputs.title}}"
