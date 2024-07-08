@@ -8,7 +8,7 @@
     ".eslintcache",
     "*.log"
   ],
-  "author": "",
+  "author": "github-actions[bot]",
   "repository": "",
   "commitlint": {
     "extends": ["@commitlint/config-conventional"]
