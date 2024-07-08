@@ -4,7 +4,7 @@ import { Release } from '../lib/index.js';
 import { ReleaseConfig } from '../lib/releaseConfig.js';
 
 async function main() {
-  const releaseConfig = new ReleaseConfig({ increment: false }).setup();
+  const releaseConfig = new ReleaseConfig({ isReleasePR: true }).setup();
   console.log(releaseConfig);
   const release = new Release(releaseConfig);
 

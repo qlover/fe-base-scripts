@@ -53,9 +53,9 @@ export class Release {
 
     command.push('--ci');
 
-    // use current pkg
-    if (!this.config.increment) {
-      command.push('--no-increment');
+    // use current pkg, no publish npm and publish github
+    if (this.config.isReleasePR) {
+      command.push('--no-increment --no-npm.publish --no-github.publish');
     }
 
     if (releaseItConfig) {
