@@ -1,4 +1,4 @@
-name: FE Release
+name: FE Create Release PR
 on:
   push:
     branches:
@@ -6,7 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, '[Bot Release]') == true
+    # if: |
+    #   contains(github.event.head_commit.message, '[Bot Release]') == false &&
+    #   contains(github.event.head_commit.message, 'chore(tag)') == false
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -22,8 +24,8 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
       # !!!open Workflow permissions setting, Actions -> general -> Workflow permissions -> Read and write permissions
       # When releasing, a commit will be created and then submitted to the branch, creating a PR to merge with the protected branch
-      - name: Publishing to NPM and GitHub
-        run: npm run release
+      - name: Create Publishing to NPM and GitHub PR
+        run: npm run release:create
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN}}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN}}

@@ -131,4 +131,26 @@ export class ReleaseConfig {
       }
     );
   }
+
+  getReleasePRTitle(tagName) {
+    return format(
+      loadsh.get(this.feScriptsConfig, ['release', 'PRTitle']) || '',
+      {
+        env: this.env,
+        branch: this.branch,
+        tagName
+      }
+    );
+  }
+
+  getReleasePRBody(tagName) {
+    return format(
+      loadsh.get(this.feScriptsConfig, ['release', 'PRBody']) || '',
+      {
+        env: this.env,
+        branch: this.branch,
+        tagName
+      }
+    );
+  }
 }

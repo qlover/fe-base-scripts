@@ -1,27 +1,6 @@
 import { Shell } from './shell.js';
 import { Logger } from './logger.js';
 
-const ContentTpl = {
-  PR_TITLE_TPL: '[From bot] Release {mainBranch} v{tagName} from {env}',
-  PR_BODY_TPL: 'This PR includes version bump to v{tagName}',
-  RELEASE_BRANCH: '{env}-release-v{tagName}',
-
-  getReleaseBranch(tagName, env) {
-    return ContentTpl.RELEASE_BRANCH.replace('{env}', env).replace(
-      '{tagName}',
-      tagName
-    );
-  },
-  getPRtitle(mainBranch, tagName, env) {
-    return ContentTpl.PR_TITLE_TPL.replace('{mainBranch}', mainBranch)
-      .replace('{tagName}', tagName)
-      .replace('{env}', env);
-  },
-  getPRBody(tagName) {
-    return ContentTpl.PR_BODY_TPL.replace('{tagName}', tagName);
-  }
-};
-
 export class Release {
   constructor(config) {
     /**
@@ -73,8 +52,6 @@ export class Release {
   }
 
   async releaseIt() {
-    this.log.log('Publishing to NPM and GitHub...');
-
     await this.shell.exec(
       `echo "//registry.npmjs.org/:_authToken=${this.config.npmToken}" > .npmrc`
     );
@@ -82,8 +59,6 @@ export class Release {
     await this.shell.exec(this.componseReleaseItCommand(), {
       env: this.releaseItEnv
     });
-
-    this.log.success('Publishing to NPM successfully');
   }
 
   async checkTag() {
@@ -127,8 +102,8 @@ export class Release {
       `echo "${this.config.ghToken}" | gh auth login --with-token`
     );
 
-    const title = ContentTpl.getPRtitle(this.config.branch, tagName, this.env);
-    const body = ContentTpl.getPRBody(tagName);
+    const title = this.config.getReleasePRTitle(tagName);
+    const body = this.config.getReleasePRBody(tagName);
     const command = `gh pr create --title "${title}" --body "${body}" --base ${this.config.branch} --head ${releaseBranch}`;
 
     let output = '';
