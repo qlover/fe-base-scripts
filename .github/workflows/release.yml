@@ -4,59 +4,51 @@ on:
     branches:
       - test
 jobs:
-  create-release-PR:
+  release:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.head_commit.message, '[Bot Release]') == false
     steps:
+      # - name: Print GitHub Event Information
+      #   run: echo "${{ toJson(github.event) }}" > event.json
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: yarn install
+
       - name: Get PR title
         id: pr-title
         run: |
-          PR_NUMBER=$(jq --raw-output .number < "$GITHUB_EVENT_PATH")
-          if [ "$PR_NUMBER" != "null" ]; then
+          # Get the commit SHA of the push
+          COMMIT_SHA=${{ github.event.after }}
+          
+          # Use the commit SHA to find the PR number
+          PR_NUMBER=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/${COMMIT_SHA}/pulls" \
+            | jq --raw-output '.[0].number')
+          
+          # If PR number found, fetch the PR title
+          if [ -n "$PR_NUMBER" ]; then
             PR_TITLE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-              "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}" \
               | jq --raw-output .title)
             echo "::set-output name=title::$PR_TITLE"
+          else
+            echo "No PR number found for commit ${COMMIT_SHA}."
           fi
+          echo "${{steps.pr-title.outputs.title}}"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Install dependencies
-        run: yarn install
-      - name: Config Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      # !!!open Workflow permissions setting, Actions -> general -> Workflow permissions -> Read and write permissions
-      # When releasing, a commit will be created and then submitted to the branch, creating a PR to merge with the protected branch
-      - name: Create Publishing to NPM and GitHub PR
-        run: npm run release:create
+
+      # use [bot] to distinguish between release and release pr 
+      - name: Publishing to NPM and GitHub
+        if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == true
+        run: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN}}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN}}
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-
-  release:
-    runs-on: ubuntu-latest
-    if: startsWith(github.event.head_commit.message, '[Bot Release]') == true
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Install dependencies
-        run: yarn install
-      - name: Config Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      # !!!open Workflow permissions setting, Actions -> general -> Workflow permissions -> Read and write permissions
-      # When releasing, a commit will be created and then submitted to the branch, creating a PR to merge with the protected branch
-      - name: Publishing to NPM and GitHub
-        run: npm run release
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }} 
+      - name: Create Publish to NPM and Github PR
+        if: startsWith(steps.pr-title.outputs.title, '[Bot Release]') == false
+        run: npm run release:create
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN}}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN}}
