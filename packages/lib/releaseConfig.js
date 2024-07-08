@@ -64,9 +64,9 @@ export class ReleaseConfig {
   }
 
   getUserInfo() {
-    const { author, repository } = pkg;
+    const { repository } = pkg;
     const feScriptsConfig = feScriptsSearch.config;
-    const localAuthor = feScriptsConfig.author || author;
+    const localAuthor = feScriptsConfig.author;
 
     // check author
     const authorName = isPlainObject(localAuthor)
@@ -74,7 +74,9 @@ export class ReleaseConfig {
       : localAuthor;
 
     if (!isValidString(authorName)) {
-      throw new Error('please set .fe-scripts valid author');
+      throw new Error(
+        'please set .fe-scripts valid author, defualt is github-actions[bot]'
+      );
     }
 
     const repoName =
