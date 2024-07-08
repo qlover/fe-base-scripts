@@ -14,11 +14,5 @@ jobs:
         uses: actions/checkout@v3
       - name: Get PR title and author
         id: pr_info
-        run: |
-          echo "::set-output name=title::${{ github.event.pull_request.title }}"
-          echo "::set-output name=user::${{ github.event.pull_request.user.login }}"
-      - name: Run special release steps
-        if: ${{ steps.pr_info.outputs.user == 'github-actions[bot]' || startsWith(steps.pr_info.outputs.title, '[bot release]') }}
-        run: |
-          echo "Running special release steps"
+        run:  echo "${{ toJson(github.event) }}
 
