@@ -1,5 +1,17 @@
 
 
+## 0.0.2 (2024-07-08)
+
+
+### Bug Fixes
+
+* scripts command ([0097bef](https://github.com/qlover/fe-base-scripts/commit/0097bef35b496b93a07c8761b9bf2ffd7aa0a898))
+
+
+### Features
+
+* relesae config ([11b5e3b](https://github.com/qlover/fe-base-scripts/commit/11b5e3b276114ea4ef5b068a656c40eda41151d8))
+
 ## [0.0.12](https://github.com/qlover/fe-base-scripts/compare/0.0.11...0.0.12) (2024-07-04)
 
 ## [0.0.11](https://github.com/qlover/fe-base-scripts/compare/0.0.10...0.0.11) (2024-07-04)
