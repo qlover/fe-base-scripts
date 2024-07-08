@@ -5,8 +5,8 @@ import { ReleaseConfig } from '../lib/releaseConfig.js';
 
 async function main() {
   const releaseConfig = new ReleaseConfig({ isCreateRelease: true }).setup();
-
   releaseConfig.log.log('Create Publish to NPM and Github PR ...');
+
   const release = new Release(releaseConfig);
 
   await release.releaseIt();
