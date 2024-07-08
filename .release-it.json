@@ -14,7 +14,7 @@
     "commitArgs": [],
     "tag": true,
     "tagExclude": null,
-    "tagName": null,
+    "tagName": "test-v{version}",
     "tagMatch": null,
     "getLatestTagFromAllRefs": false,
     "tagAnnotation": "chore(tag): release v${version}",
@@ -24,7 +24,7 @@
     "pushRepo": ""
   },
   "npm": {
-    "publish": true,
+    "publish": false,
     "publishPath": ".",
     "publishArgs": [],
     "tag": null,
@@ -36,7 +36,7 @@
     "timeout": 10
   },
   "github": {
-    "release": true,
+    "release": false,
     "releaseName": "chore(tag): release v${version}",
     "releaseNotes": null,
     "autoGenerate": false,

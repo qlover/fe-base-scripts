@@ -13,5 +13,8 @@
   "commitlint": {
     "extends": ["@commitlint/config-conventional"]
   },
-  "releaseIt": {}
+  "releaseIt": {},
+  "release": {
+    "branchName": "${env}-${branch}-${tagName}"
+  }
 }
