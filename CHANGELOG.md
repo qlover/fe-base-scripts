@@ -1,5 +1,14 @@
 
 
+## [0.0.5](https://github.com/qlover/fe-base-scripts/compare/test-v0.0.2...test-v0.0.5) (2024-07-08)
+
+
+### Features
+
+* relesae config ([11b5e3b](https://github.com/qlover/fe-base-scripts/commit/11b5e3b276114ea4ef5b068a656c40eda41151d8))
+
+## [0.0.4](https://github.com/qlover/fe-base-scripts/compare/test-v0.0.2...test-v0.0.4) (2024-07-08)
+
 ## [0.0.12](https://github.com/qlover/fe-base-scripts/compare/0.0.11...0.0.12) (2024-07-04)
 
 ## [0.0.11](https://github.com/qlover/fe-base-scripts/compare/0.0.10...0.0.11) (2024-07-04)
