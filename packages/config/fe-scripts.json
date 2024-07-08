@@ -15,6 +15,7 @@
   },
   "releaseIt": {},
   "release": {
+    "autoMergeReleasePR": false,
     "branchName": "${env}-${branch}-${tagName}",
     "PRTitle": "[Bot Release] Release ${branch} ${tagName} from ${env}",
     "PRBody": "This PR includes version bump to ${tagName}"
