@@ -1,3 +1,7 @@
+
+
+## [0.0.6](https://github.com/qlover/fe-base-scripts/compare/test-v0.0.2...test-v0.0.6) (2024-07-08)
+
 ### Bug Fixes
 
 - scripts command ([0097bef](https://github.com/qlover/fe-base-scripts/commit/0097bef35b496b93a07c8761b9bf2ffd7aa0a898))
