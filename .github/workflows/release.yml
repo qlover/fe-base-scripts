@@ -8,6 +8,18 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.event.head_commit.message, '[Bot Release]') == false
     steps:
+      - name: Get PR title
+        id: pr-title
+        run: |
+          PR_NUMBER=$(jq --raw-output .number < "$GITHUB_EVENT_PATH")
+          if [ "$PR_NUMBER" != "null" ]; then
+            PR_TITLE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" \
+              | jq --raw-output .title)
+            echo "::set-output name=title::$PR_TITLE"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
