@@ -36,7 +36,8 @@ export class Release {
     // 2. no publish github/release/tag
     if (this.config.isCreateRelease) {
       command.push(
-        '--no-npm.publish --no-git.push --no-github.publish --no-github.release'
+        '--no-git.tag --no-git.push --no-npm.publish',
+        // '--no-npm.publish --no-git.push --no-github.publish --no-github.release'
       );
     }
     // use current pkg, no publish npm and publish github
@@ -104,7 +105,7 @@ export class Release {
 
     const title = this.config.getReleasePRTitle(tagName);
     const body = this.config.getReleasePRBody(tagName);
-    const command = `gh pr create --title "${title}" --body "${body}" --base ${this.config.branch} --head ${releaseBranch}`;
+    const command = `gh pr create --title "${title}" --body "${body}" --base ${this.config.branch} --head ${releaseBranch} --labels [update-version]`;
 
     let output = '';
     try {
