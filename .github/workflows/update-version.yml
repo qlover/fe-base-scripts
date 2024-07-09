@@ -1,9 +1,9 @@
-name: Version Update
+name: FE Version Update
 
 on:
   push:
     branches:
-      - test
+      - master
   workflow_dispatch:
 
 jobs:
