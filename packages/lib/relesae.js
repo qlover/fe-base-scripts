@@ -100,6 +100,7 @@ export class Release {
     try {
       const label = this.config.feScriptsConfig.release.label;
       await this.shell.exec(
+        // eslint-disable-next-line no-template-curly-in-string
         'gh label create "${name}" --description "${description}" --color "${color}"',
         {},
         label
