@@ -7,7 +7,7 @@ on:
 
 jobs:
   version:
-    if: contains(github.event.pull_request.labels.*.name, '[update-version]') == false
+    # if: contains(github.event.pull_request.labels.*.name, '[update-version]') == false
     runs-on: ubuntu-latest
 
     steps:
