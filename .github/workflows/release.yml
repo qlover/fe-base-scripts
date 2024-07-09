@@ -32,7 +32,6 @@ jobs:
         run: npm install -g yarn
       - name: Install dependencies
         run: yarn install
-
       - name: Create tag and publish
         run: npm run release
         env:
