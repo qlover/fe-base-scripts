@@ -36,8 +36,8 @@ export class Release {
     // 2. no publish github/release/tag
     if (this.config.isCreateRelease) {
       command.push(
-        '--no-git.tag --no-git.push --no-npm.publish'
-        // '--no-npm.publish --no-git.push --no-github.publish --no-github.release'
+        '--no-git.tag --no-git.push --no-npm.publish --no-github.release'
+        // '--no-npm.publish --no-git.tag --no-git.push --no-github.publish --no-github.release'
       );
     }
     // use current pkg, no publish npm and publish github
