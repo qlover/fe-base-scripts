@@ -1,5 +1,12 @@
 
 
+## [0.0.26](https://github.com/qlover/fe-base-scripts/compare/0.0.25...0.0.26) (2024-07-09)
+
+
+### Bug Fixes
+
+* general ci name ([#70](https://github.com/qlover/fe-base-scripts/issues/70)) ([b5c4a82](https://github.com/qlover/fe-base-scripts/commit/b5c4a82a055e7cc5c48f65742471ad4f22580611))
+
 ## [0.0.25](https://github.com/qlover/fe-base-scripts/compare/0.0.24...0.0.25) (2024-07-09)
 
 ## [0.0.24](https://github.com/qlover/fe-base-scripts/compare/0.0.23...0.0.24) (2024-07-09)
