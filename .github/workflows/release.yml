@@ -1,13 +1,15 @@
 name: FE Release
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - master
 
 jobs:
   publish:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master' && contains(github.event.pull_request.labels.*.name, '[update-version]')
     runs-on: ubuntu-latest
 
     steps:

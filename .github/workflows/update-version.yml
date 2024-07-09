@@ -1,4 +1,4 @@
-name: FE Version Update
+name: FE Update Version
 
 on:
   push:

@@ -105,7 +105,7 @@ export class Release {
 
     const title = this.config.getReleasePRTitle(tagName);
     const body = this.config.getReleasePRBody(tagName);
-    const command = `gh pr create --title "${title}" --body "${body}" --base ${this.config.branch} --head ${releaseBranch}`;
+    const command = `gh pr create --title "${title}" --body "${body}" --base ${this.config.branch} --head ${releaseBranch} --labels [update-version]`;
 
     let output = '';
     try {
