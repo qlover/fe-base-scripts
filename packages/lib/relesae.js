@@ -36,7 +36,7 @@ export class Release {
     // 2. no publish github/release/tag
     if (this.config.isCreateRelease) {
       command.push(
-        '--no-git.tag --no-git.push --no-npm.publish',
+        '--no-git.tag --no-git.push --no-npm.publish'
         // '--no-npm.publish --no-git.push --no-github.publish --no-github.release'
       );
     }
@@ -96,12 +96,22 @@ export class Release {
     return { tagName, releaseBranch };
   }
 
+  async createPRLabel() {
+    await this.shell.exec(`
+      if ! gh label list | grep -q "[update-version]"; then
+        gh label create "[update-version]" --description "Label for version update PRs" --color "FFFFFF"
+      fi
+    `);
+  }
+
   async createReleasePR(tagName, releaseBranch) {
     this.log.log('Create Release PR', tagName, releaseBranch);
 
     await this.shell.exec(
       `echo "${this.config.ghToken}" | gh auth login --with-token`
     );
+
+    await this.createPRLabel();
 
     const title = this.config.getReleasePRTitle(tagName);
     const body = this.config.getReleasePRBody(tagName);
