@@ -1,0 +1,53 @@
+name: Version Update
+
+on:
+  push:
+    branches:
+      - test
+  workflow_dispatch:
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Config Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"  
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.19.0'
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Update version
+        run: npm run update-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN}}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN}}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }} 
+      # - name: Create new branch
+      #   run: |
+      #     git config --global user.name "github-actions[bot]"
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git checkout -b version-update
+      #     git add package.json
+      #     git commit -m "chore: bump version"
+      #     git push --set-upstream origin version-update
+
+      # - name: Create Pull Request
+      #   uses: peter-evans/create-pull-request@v4
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: version-update
+      #     title: "chore: bump version"
+      #     body: "This PR updates the version number in package.json."
+      #     labels: version-update
