@@ -1,4 +1,4 @@
-name: FE Release
+name: FE General
 
 on:
   pull_request:
