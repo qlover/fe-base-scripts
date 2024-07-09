@@ -98,11 +98,14 @@ export class Release {
 
   async createPRLabel() {
     try {
+      const label = this.config.feScriptsConfig.release.label;
       await this.shell.exec(
-        'gh label create "[update-version]" --description "Label for version update PRs" --color "FFFFFF"'
+        'gh label create "${name}" --description "${description}" --color "${color}"',
+        {},
+        label
       );
     } catch (error) {
-      this.log.error('create pr lable', error);
+      this.log.error('create pr label', error);
     }
   }
 
@@ -117,7 +120,8 @@ export class Release {
 
     const title = this.config.getReleasePRTitle(tagName);
     const body = this.config.getReleasePRBody(tagName);
-    const command = `gh pr create --title "${title}" --body "${body}" --base ${this.config.branch} --head ${releaseBranch} --label "[update-version]"`;
+    const label = this.config.feScriptsConfig.release.label;
+    const command = `gh pr create --title "${title}" --body "${body}" --base ${this.config.branch} --head ${releaseBranch} --label "${label.name}"`;
 
     let output = '';
     try {

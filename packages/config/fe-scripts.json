@@ -18,6 +18,11 @@
     "autoMergeReleasePR": true,
     "branchName": "${env}-${branch}-${tagName}",
     "PRTitle": "[Bot Release] Branch:${branch}, Tag:${tagName}, Env:${env}",
-    "PRBody": "This PR includes version bump to ${tagName}"
+    "PRBody": "This PR includes version bump to ${tagName}",
+    "label": {
+      "color": "1A7F37",
+      "description": "Label for version update PRs",
+      "name": "CI-Release"
+    }
   }
 }
