@@ -97,11 +97,13 @@ export class Release {
   }
 
   async createPRLabel() {
-    await this.shell.exec(`
-      if ! gh label list | grep -q "[update-version]"; then
-        gh label create "[update-version]" --description "Label for version update PRs" --color "FFFFFF"
-      fi
-    `);
+    try {
+      await this.shell.exec(
+        'gh label create "[update-version]" --description "Label for version update PRs" --color "FFFFFF"'
+      );
+    } catch (error) {
+      this.log.error('create pr lable', error);
+    }
   }
 
   async createReleasePR(tagName, releaseBranch) {
