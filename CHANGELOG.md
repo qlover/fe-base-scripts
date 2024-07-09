@@ -1,5 +1,12 @@
 
 
+## [0.0.23](https://github.com/qlover/fe-base-scripts/compare/0.0.22...0.0.23) (2024-07-09)
+
+
+### Reverts
+
+* Revert "Fix/ci pr lable skip update version (#62)" (#63) ([f61476d](https://github.com/qlover/fe-base-scripts/commit/f61476d64ef4ae62de0341021953b691e0f7d125)), closes [#62](https://github.com/qlover/fe-base-scripts/issues/62) [#63](https://github.com/qlover/fe-base-scripts/issues/63)
+
 ## [0.0.22](https://github.com/qlover/fe-base-scripts/compare/0.0.21...0.0.22) (2024-07-09)
 
 ## [0.0.21](https://github.com/qlover/fe-base-scripts/compare/0.0.20...0.0.21) (2024-07-09)
