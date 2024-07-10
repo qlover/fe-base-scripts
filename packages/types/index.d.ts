@@ -8,7 +8,7 @@ declare module '@qlover/fe-scripts' {
     config: SearchConfigType;
   };
 
-  export type ReleaseConfig = {
+  export type FeScriptRelease = {
     /**
      * Whether to automatically merge PR when creating and publishing
      *
@@ -117,6 +117,6 @@ declare module '@qlover/fe-scripts' {
     /**
      * config of CI release
      */
-    release?: ReleaseConfig;
+    release?: FeScriptRelease;
   };
 }
