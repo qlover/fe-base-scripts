@@ -15,7 +15,7 @@ async function main() {
 
   const prNumber = await release.createReleasePR(tagName, releaseBranch);
 
-  if (releaseConfig.feScriptsConfig.release.autoMergeReleasePR) {
+  if (releaseConfig.getRelease('autoMergeReleasePR')) {
     releaseConfig.log.log('auto mergae release PR...');
 
     await release.autoMergePR(prNumber);

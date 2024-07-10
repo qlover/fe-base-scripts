@@ -39,6 +39,10 @@ export class ReleaseConfig {
     this.log = new Logger();
   }
 
+  getRelease(path, defaultValue) {
+    return get(this.feScriptsConfig.release, path, defaultValue);
+  }
+
   setup() {
     loadEnv();
 
@@ -122,35 +126,24 @@ export class ReleaseConfig {
   }
 
   getReleaseBranch(tagName) {
-    return format(
-      loadsh.get(this.feScriptsConfig, ['release', 'branchName']) || '',
-      {
-        env: this.env,
-        branch: this.branch,
-        tagName
-      }
-    );
+    return format(this.getRelease('branchName', ''), {
+      env: this.env,
+      branch: this.branch,
+      tagName
+    });
   }
 
   getReleasePRTitle(tagName) {
-    return format(
-      loadsh.get(this.feScriptsConfig, ['release', 'PRTitle']) || '',
-      {
-        env: this.env,
-        branch: this.branch,
-        tagName
-      }
-    );
+    return format(this.getRelease('PRTitle', ''), {
+      env: this.env,
+      branch: this.branch,
+      tagName
+    });
   }
 
   getReleasePRBody(tagName) {
-    return format(
-      loadsh.get(this.feScriptsConfig, ['release', 'PRBody']) || '',
-      {
-        env: this.env,
-        branch: this.branch,
-        tagName
-      }
-    );
+    return format(this.getRelease('PRBody', ''), {
+      tagName
+    });
   }
 }
