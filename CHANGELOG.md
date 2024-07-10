@@ -1,5 +1,12 @@
 
 
+## [0.0.28](https://github.com/qlover/fe-base-scripts/compare/0.0.27...0.0.28) (2024-07-10)
+
+
+### Bug Fixes
+
+* get release it config ([#74](https://github.com/qlover/fe-base-scripts/issues/74)) ([37f1642](https://github.com/qlover/fe-base-scripts/commit/37f1642a2ac89b227eaddcd7b0d1b2206317ec08))
+
 ## [0.0.27](https://github.com/qlover/fe-base-scripts/compare/0.0.26...0.0.27) (2024-07-10)
 
 ## [0.0.26](https://github.com/qlover/fe-base-scripts/compare/0.0.25...0.0.26) (2024-07-09)
