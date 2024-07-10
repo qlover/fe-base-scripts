@@ -19,7 +19,7 @@ declare module '@qlover/fe-scripts' {
     /**
      * PR auto merged type
      *
-     * @default merge
+     * @default squash
      */
     autoMergeType?: 'merge' | 'squash' | 'rebase';
     /**
