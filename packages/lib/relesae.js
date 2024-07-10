@@ -168,7 +168,7 @@ export class Release {
       owner: userInfo.authorName,
       repo: userInfo.repoName,
       pull_number: prNumber,
-      merge_method: 'merge' // 合并方式，可以是 merge, squash 或 rebase
+      merge_method: this.config.getRelease('autoMergeType', 'merge')
     });
 
     this.log.success('Merged successfully');

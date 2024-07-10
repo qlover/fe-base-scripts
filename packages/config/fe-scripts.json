@@ -16,6 +16,7 @@
   "releaseIt": {},
   "release": {
     "autoMergeReleasePR": true,
+    "autoMergeType": "merge",
     "branchName": "${env}-${branch}-${tagName}",
     "PRTitle": "[Bot Release] Branch:${branch}, Tag:${tagName}, Env:${env}",
     "PRBody": "This PR includes version bump to ${tagName}",

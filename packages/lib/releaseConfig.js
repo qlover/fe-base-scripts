@@ -39,6 +39,10 @@ export class ReleaseConfig {
     this.log = new Logger();
   }
 
+  getRelease(path, defaultValue) {
+    return get(this.feScriptsConfig.release, path, defaultValue);
+  }
+
   setup() {
     loadEnv();
 
