@@ -1,11 +1,12 @@
 import { feScriptsSearch } from './index.js';
 import { readJSON } from '../utils/files.js';
 import loadsh from 'lodash';
-import { join, resolve } from 'path';
+import { dirname, join, resolve } from 'path';
 import { Logger } from './logger.js';
 import { getEnvDestroy, loadEnv } from '../utils/env.js';
 import { cosmiconfigSync } from 'cosmiconfig';
 import { format } from '../utils/index.js';
+import { fileURLToPath } from 'url';
 
 const { isString, isPlainObject, get } = loadsh;
 const pkg = readJSON(resolve('./package.json'));
@@ -122,7 +123,10 @@ export class ReleaseConfig {
     }
 
     // this json copy with release-it default json
-    return join(__dirname, '../../.release-it.json');
+    return join(
+      dirname(fileURLToPath(import.meta.url)),
+      '../../.release-it.json'
+    );
   }
 
   getReleaseBranch(tagName) {
